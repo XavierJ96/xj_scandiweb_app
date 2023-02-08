@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 export default function Add() {
   // Declare state variables to store the selected option, generated SKU, and the product details
   const [selectedOption, setSelectedOption] = useState("");
-  const [generatedSKU, setGeneratedSKU] = useState(null);
   const route = useRouter();
   const [product, setProduct] = useState({
     sku: "",
@@ -28,22 +27,6 @@ export default function Add() {
     });
   };
 
-  // Use Effect hook to update the generated SKU whenever the selected option changes
-  useEffect(() => {
-    setGeneratedSKU(generateSKU(selectedOption));
-  }, [selectedOption]);
-
-  // Function to generate a unique SKU based on the current timestamp and a random string
-  function generateSKU(selectedOption) {
-    if (!selectedOption) {
-      return;
-    }
-
-    const timestamp = new Date().getTime().toString().substring(0, 6);
-    const randomString = Math.random().toString(36).substring(2, 8);
-    return `#${timestamp}-${randomString}`.substring(0, 10);
-  }
-
   // Event handler to update the selected option when the user selects a different option
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
@@ -58,7 +41,7 @@ export default function Add() {
 
     // Create a new product object to add to the database
     const productToAdd = {
-      sku: generatedSKU,
+      sku: product.sku,
       name: product.name,
       price: product.price,
       productType: selectedOption,
@@ -113,10 +96,11 @@ export default function Add() {
             <input
               type="text"
               id="sku"
+              name="sku"
               className="rounded-lg py-1 px-2"
               required
-              disabled
-              value={generatedSKU}
+              value={product.sku}
+              onChange={handleInputChange}
             />
           </div>
           <div className="max-w-xs w-full flex justify-between items-center">
