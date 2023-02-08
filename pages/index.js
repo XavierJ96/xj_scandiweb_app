@@ -1,11 +1,47 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from '@/styles/Home.module.css'
-
-const inter = Inter({ subsets: ['latin'] })
+import Head from "next/head";
+import Image from "next/image";
+import { Inter } from "@next/font/google";
+import styles from "@/styles/Home.module.css";
+import Product from "@/components/product";
+import Link from "next/link";
+import { db } from "@/server/firebase";
+import { collection, getDocs, onSnapshot, doc, deleteDoc } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [product, setProduct] = useState([]);
+  const [checkedIds, setCheckedIds] = useState([]);
+  const colRef = collection(db, "products");
+
+  // Get data
+  const getData = () => {
+    const unsubscribe = onSnapshot(colRef, (snapshot) => {
+      setProduct(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    });
+    return unsubscribe;
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const handleCheckboxChange = (id) => {
+    setCheckedIds(
+      checkedIds.includes(id)
+        ? checkedIds.filter((i) => i !== id)
+        : [...checkedIds, id]
+    );
+  };
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    for (const id of checkedIds) {
+    const docRef = doc(db, 'products', id,)
+    await deleteDoc(docRef)
+    }
+    setCheckedIds([]);
+  };
+
   return (
     <>
       <Head>
@@ -14,110 +50,63 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.js</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
+      <main className="my-10">
+        <div className="max-w-2xl mx-auto">
+          <header>
+            <nav className="flex items-center border-b-4 border--[#424242] pb-4">
+              <h1 className="text-2xl font-bold text-[#424242]">
+                Product List
+              </h1>
+              <div className="ml-auto space-x-4">
+                <Link href="/add">
+                  <button className="px-4 py-2 bg-green-500 rounded-lg font-semibold text-white">
+                    Add
+                  </button>
+                </Link>
+                <button
+                  type="submit"
+                  onClick={handleDelete}
+                  className="px-4 py-2 bg-red-500 rounded-lg font-semibold text-white"
+                >
+                  Mass Delete
+                </button>
+              </div>
+            </nav>
+          </header>
+          <div className="grid grid-cols-3 mt-10 gap-4">
+            {product.map((product) => {
+              const productType = product.productType;
+              const details =
+                productType === "furniture"
+                  ? `Dimension: ${product.height}x${product.width}x${product.length}`
+                  : productType === "book"
+                  ? `Weight: ${product.weight}KG`
+                  : `Size: ${product.size} MB`;
+
+              return (
+                <div
+                  className="flex justify-center p-5 shadow-md shadow-[#424242]"
+                  key={product.id}
+                >
+                  <div>
+                    <input
+                      type="checkbox"
+                      className="delete-checkbox"
+                      onChange={() => handleCheckboxChange(product.id)}
+                    />
+                  </div>
+                  <div className="flex items-center flex-col text-center font-semibold">
+                    <span>{product.sku}</span>
+                    <span>{product.name}</span>
+                    <span>{product.price} $</span>
+                    <span>{details}</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
         </div>
       </main>
     </>
-  )
+  );
 }
