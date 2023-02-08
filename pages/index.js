@@ -76,7 +76,7 @@ export default function Home() {
               </div>
             </nav>
           </header>
-          <div className="grid grid-cols-3 mt-10 gap-4">
+          {product && <div className="grid grid-cols-3 mt-10 gap-4">
             {product.map((product) => {
               const productType = product.productType;
               const details =
@@ -107,7 +107,7 @@ export default function Home() {
                 </div>
               );
             })}
-          </div>
+          </div>}
         </div>
       </main>
     </>
