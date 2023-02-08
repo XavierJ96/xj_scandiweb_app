@@ -184,7 +184,7 @@ export default function Add() {
                 <label htmlFor="weight">Weight (KG):</label>
                 <input
                   type="number"
-                  id="weigth"
+                  id="weight"
                   name="weight"
                   max={999999}
                   min={0}
