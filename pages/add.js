@@ -151,7 +151,7 @@ export default function Add() {
                 Book
               </option>
               <option value="furniture" id="Furniture">
-                Funiture
+                Furniture
               </option>
             </select>
           </div>
@@ -173,7 +173,9 @@ export default function Add() {
                   className="rounded-lg py-1 px-2"
                 />
               </div>
-              <span className="text-sm text-red-500">* Please, provide size</span>
+              <span className="text-sm text-red-500">
+                * Please, provide size
+              </span>
             </div>
           )}
           {selectedOption === "book" && (
@@ -193,7 +195,9 @@ export default function Add() {
                   className="rounded-lg py-1 px-2"
                 />
               </div>
-              <span className="text-sm text-red-500">* Please, provide weight</span>
+              <span className="text-sm text-red-500">
+                * Please, provide weight
+              </span>
             </div>
           )}
           {selectedOption === "furniture" && (
@@ -243,7 +247,9 @@ export default function Add() {
                   className="rounded-lg py-1 px-2"
                 />
               </div>
-              <span className="text-sm text-red-500">* Please, provide dimensions</span>
+              <span className="text-sm text-red-500">
+                * Please, provide dimensions
+              </span>
             </div>
           )}
         </div>
