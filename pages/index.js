@@ -66,6 +66,7 @@ export default function Home() {
                 <button
                   type="submit"
                   onClick={handleDelete}
+                  id="delete-product-btn"
                   className="px-4 py-2 bg-red-500 rounded-lg font-semibold text-white"
                 >
                   Mass Delete
