@@ -16,7 +16,7 @@ export default function Home() {
   const colRef = collection(db, "products");
 
   // Get data
-  const getData = () => {
+  const getData = async () => {
     const unsubscribe = onSnapshot(colRef, (snapshot) => {
       setProduct(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     });
@@ -27,7 +27,7 @@ export default function Home() {
     getData();
   }, []);
 
-  const handleCheckboxChange = (id) => {
+  const handleCheckboxChange = async (id) => {
     setCheckedIds(
       checkedIds.includes(id)
         ? checkedIds.filter((i) => i !== id)

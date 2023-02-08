@@ -28,7 +28,7 @@ export default function Add() {
   };
 
   // Event handler to update the selected option when the user selects a different option
-  const handleOptionChange = (e) => {
+  const handleOptionChange = async (e) => {
     setSelectedOption(e.target.value);
   };
 
