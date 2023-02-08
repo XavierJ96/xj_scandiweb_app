@@ -5,7 +5,13 @@ import styles from "@/styles/Home.module.css";
 import Product from "@/components/product";
 import Link from "next/link";
 import { db } from "@/server/firebase";
-import { collection, getDocs, onSnapshot, doc, deleteDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  doc,
+  deleteDoc,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 export default function Home() {
@@ -36,8 +42,8 @@ export default function Home() {
   const handleDelete = async (e) => {
     e.preventDefault();
     for (const id of checkedIds) {
-    const docRef = doc(db, 'products', id,)
-    await deleteDoc(docRef)
+      const docRef = doc(db, "products", id);
+      await deleteDoc(docRef);
     }
     setCheckedIds([]);
   };
@@ -60,7 +66,7 @@ export default function Home() {
               <div className="ml-auto space-x-4">
                 <Link href="/add">
                   <button className="px-4 py-2 bg-green-500 rounded-lg font-semibold text-white">
-                    Add
+                    ADD
                   </button>
                 </Link>
                 <button
@@ -69,7 +75,7 @@ export default function Home() {
                   id="delete-product-btn"
                   className="px-4 py-2 bg-red-500 rounded-lg font-semibold text-white"
                 >
-                  Mass Delete
+                  MASS DELETE
                 </button>
               </div>
             </nav>
