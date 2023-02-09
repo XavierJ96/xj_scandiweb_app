@@ -100,7 +100,7 @@ export default function Home() {
                   </div>
                   <div className="flex items-center flex-col text-center font-semibold">
                     <span>{product.sku}</span>
-                    <span id="name">{product.name}</span>
+                    <span>{product.name}</span>
                     <span>{product.price} $</span>
                     <span>{details}</span>
                   </div>
